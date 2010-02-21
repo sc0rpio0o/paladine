@@ -296,7 +296,7 @@ int Master::Run()
     uint32 realCurrTime, realPrevTime;
     realCurrTime = realPrevTime = getMSTime();
 
-    uint32 socketSelecttime = sWorld.getConfig(CONFIG_SOCKET_SELECTTIME);
+    uint32 socketSelecttime = sWorld.getConfig(CONFIG_UINT32_SOCKET_SELECTTIME);
 
     // Start up evo-Chat
     ACE_Based::Thread irc(new IRCClient);
