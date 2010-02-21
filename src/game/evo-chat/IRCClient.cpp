@@ -36,21 +36,21 @@ IRCClient::~IRCClient(){}
 // ZThread Entry This function is called when the thread is created in Master.cpp (mangosd)
 void IRCClient::run()
 {
-    sIRC.iLog.WriteLog(" %s : ****** MaNGOS With evo-Chat Has Been Started ******", sIRC.iLog.GetLogDateTimeStr().c_str());
+    sIRC.iLog.WriteLog(" %s : ****** evo-X-Core With Evo-X-Chat Has Been Started ******", sIRC.iLog.GetLogDateTimeStr().c_str());
 
     // Before we begin we wait a while MaNGOS is still starting up.
     ACE_Based::Thread::Sleep(500);
     sLog.outString("\n%s\n%s\n%s\n%s",
-        "***************************************",
-        "**   evo-Chat Threaded IRC Client    **",
-        "**     With Enhanced GM Control.     **",
-        "**      	Ported by bizkut           **",
-        "**   http://github.com/bizkut        **",
-        "***************************************");
-    sLog.outString("****** evo-Chat: %s ********", sIRC._Mver.c_str());
+        "*****************************************",
+        "**   Evo-X-Chat Threaded IRC Client    **",
+        "**      With Enhanced GM Control.      **",
+        "**      	Ported by 3raZar3           **",
+        "**   http://github.com/3raZar3         **",
+        "*****************************************");
+    sLog.outString("*********** Evo-X-Chat : %s *************", sIRC._Mver.c_str());
     int cCount = 0;
     // Clean Up MySQL Tables
-    sLog.outString("*** evo-Chat: Cleaning Up Inchan Table*");
+    sLog.outString("*** Evo-X-Chat: Cleaning Up Inchan Table*");
     WorldDatabase.PExecute("DELETE FROM `IRC_Inchan`");
     sIRC._Max_Script_Inst = 0;
     // Create a loop to keep the thread running untill active is set to false
@@ -60,20 +60,20 @@ void IRCClient::run()
         if(this->InitSock())
         {
             // Connect To The IRC Server
-            sLog.outString("*** evo-Chat: Connecting to %s Try # %d ******", sIRC._Host.c_str(), cCount);
+            sLog.outString("*** Evo-X-Chat: Connecting to %s Try # %d ******", sIRC._Host.c_str(), cCount);
             if(this->Connect(sIRC._Host.c_str(), sIRC._Port))
             {
                 // On connection success reset the connection counter
                 cCount = 0;
-                sLog.outString("*** evo-Chat: Connected And Logging In*");
+                sLog.outString("*** Evo-X-Chat: Connected And Logging In*");
                 // Login to the IRC server
                 if(this->Login(sIRC._Nick, sIRC._User, sIRC._Pass))
                 {
-                    sLog.outString("*** evo-Chat: Logged In And Running!! *");
+                    sLog.outString("*** Evo-X-Chat: Logged In And Running!! *");
                     // While we are connected to the irc server keep listening for data on the socket
                     while(sIRC.Connected && !World::IsStopped()){ sIRC.SockRecv(); }
                 }
-                sLog.outString("*** evo-Chat: Connection To IRC Server Lost! ***");
+                sLog.outString("*** Evo-X-Chat: Connection To IRC Server Lost! ***");
             }
             // When an error occures or connection lost cleanup
             Disconnect();
@@ -90,7 +90,7 @@ void IRCClient::run()
         {
             // Socket could not initialize cancel
             sIRC.Active = false;
-            sLog.outError("** evo-Chat: Could not initialize socket");
+            sLog.outError("** Evo-X-Chat: Could not initialize socket");
         }
     }
     // we need to keep the thread alive or mangos will crash
