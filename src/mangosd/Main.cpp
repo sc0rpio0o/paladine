@@ -147,17 +147,37 @@ extern int main(int argc, char **argv)
     sLog.outString( "%s [world-daemon]", _FULLVERSION(REVISION_DATE,REVISION_TIME,REVISION_NR,REVISION_ID) );
     sLog.outString( "<Ctrl-C> to stop.\n\n" );
 
-    sLog.outTitle( "MM   MM         MM   MM  MMMMM   MMMM   MMMMM");
-    sLog.outTitle( "MM   MM         MM   MM MMM MMM MM  MM MMM MMM");
-    sLog.outTitle( "MMM MMM         MMM  MM MMM MMM MM  MM MMM");
-    sLog.outTitle( "MM M MM         MMMM MM MMM     MM  MM  MMM");
-    sLog.outTitle( "MM M MM  MMMMM  MM MMMM MMM     MM  MM   MMM");
-    sLog.outTitle( "MM M MM M   MMM MM  MMM MMMMMMM MM  MM    MMM");
-    sLog.outTitle( "MM   MM     MMM MM   MM MM  MMM MM  MM     MMM");
-    sLog.outTitle( "MM   MM MMMMMMM MM   MM MMM MMM MM  MM MMM MMM");
-    sLog.outTitle( "MM   MM MM  MMM MM   MM  MMMMMM  MMMM   MMMMM");
-    sLog.outTitle( "        MM  MMM http://getmangos.com");
-    sLog.outTitle( "        MMMMMM\n\n");
+    sLog.outTitle( "IXXXXX.                                           IX.");
+    sLog.outTitle( "IXXXXX.                                          XXXI");
+    sLog.outTitle( "IXX.                                   I.       XXXXX");
+    sLog.outTitle( "IXX.                                  .XX      XX 'XX");
+    sLog.outTitle( "IXX.     http://europe-wow.eu/evo-X   XXXX    IX    X");
+    sLog.outTitle( "IXX.     evo-X-Core                   IXXX   IX     X");
+    sLog.outTitle( "IXX.                                  'IXXX  XX     X");
+    sLog.outTitle( "IXX.   IXX   XX   XXXXXX.              XXXXXXX      X");
+    sLog.outTitle( "IXX.    IX   XX  IXDONIXx              'XXXXX'      X");
+    sLog.outTitle( "IXXXXX. 'X  .X'  IX v2IXx               IXXXX       x");
+    sLog.outTitle( "IXXXXX.  Xx.XX   IX   IXx                'XXX       X");
+    sLog.outTitle( "IXX.     XXXXX   IX   IXx                XXXX.      X");
+    sLog.outTitle( "IXX.     XXXXX   IX   IXx                XXI XI     X");
+    sLog.outTitle( "IXX.     XXXXI   IX   IXx  SALJA        IXXXXXX     '");
+    sLog.outTitle( "IXX.     XXXX'   IX   IXx  IXXXX.       XX XXXX");
+    sLog.outTitle( "IXX.     IXXX    IX   IXx              XX'   'XX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx              XX   XXXXX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx             XX       'XX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx            IX'        'XI");
+    sLog.outTitle( "IXX.      XXX    IX   IXx            XX          'IX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx            XI           'XXX.");
+    sLog.outTitle( "IXXXXX.   XX     IX   IXx           XX'            'XXX");
+    sLog.outTitle( "IXXXXX.   IX      XXXXXX'           XI");
+    sLog.outTitle( " Art by Don                        XX'");
+    sLog.outTitle( "                                   XX");
+    sLog.outTitle( " Paladine Evo-X-Bot               IX'");
+    sLog.outTitle( "  Courtesy of                     XX");
+    sLog.outTitle( "               3raZar3            X'");
+    sLog.outTitle( " git://github.com/3raZar3        IX\n\n");
+    sLog.outString("Using configuration file %s.", cfg_file);
+
 
     sLog.outString("Using configuration file %s.", cfg_file);
 
