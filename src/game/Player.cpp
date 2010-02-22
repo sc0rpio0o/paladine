@@ -60,6 +60,11 @@
 #include "Spell.h"
 #include "SocialMgr.h"
 #include "AchievementMgr.h"
+#include "evo-chat/IRCClient.h"
+
+// Playerbot mod:
+#include "PlayerbotAI.h"
+#include "PlayerbotMgr.h"
 
 #include <cmath>
 
@@ -309,6 +314,10 @@ Player::Player (WorldSession *session): Unit(), m_achievementMgr(this), m_reputa
 {
     m_transport = 0;
 
+    // Playerbot mod:
+    m_playerbotAI = 0;
+    m_playerbotMgr = 0;
+
     m_speakTime = 0;
     m_speakCount = 0;
 
@@ -543,6 +552,16 @@ Player::~Player ()
 
     delete m_declinedname;
     delete m_runes;
+
+    // Playerbot mod
+    if (m_playerbotAI) {
+        delete m_playerbotAI;
+        m_playerbotAI = 0;
+    }
+    if (m_playerbotMgr) {
+        delete m_playerbotMgr;
+        m_playerbotMgr = 0;
+    }
 }
 
 void Player::CleanupsBeforeDelete()
@@ -1385,6 +1404,12 @@ void Player::Update( uint32 p_time )
     //because we don't want player's ghost teleported from graveyard
     if(IsHasDelayedTeleport() && isAlive())
         TeleportTo(m_teleport_dest, m_teleport_options);
+
+	    // Playerbot mod
+    if (m_playerbotAI)
+        m_playerbotAI->UpdateAI(p_time);
+    else if (m_playerbotMgr)
+        m_playerbotMgr->UpdateAI(p_time);
 }
 
 void Player::setDeathState(DeathState s)
@@ -1622,6 +1647,11 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 
     // preparing unsummon pet if lost (we must get pet before teleportation or will not find it later)
     Pet* pet = GetPet();
+
+    // Playerbot mod: if this user has bots, tell them to stop following master
+    // so they don't try to follow the master after the master teleports
+    if (GetPlayerbotMgr())
+        GetPlayerbotMgr()->Stay();
 
     MapEntry const* mEntry = sMapStore.LookupEntry(mapid);
 
@@ -2491,6 +2521,16 @@ void Player::GiveLevel(uint32 level)
     InitGlyphsForLevel();
 
     UpdateAllStats();
+
+    if((sIRC.BOTMASK & 64) != 0)
+    {
+        char  plevel [3];
+        sprintf(plevel, "%u", level);
+
+        std::string pname = GetName();
+        std::string channel = std::string("#") + sIRC._irc_chan[sIRC.anchn].c_str();
+        sIRC.Send_IRC_Channel(channel, "\00311["+pname+"] : Has Reached Level: "+plevel, true);
+    }
 
     // set current level health and mana/energy to maximum after applying all mods.
     SetHealth(GetMaxHealth());
@@ -14474,6 +14514,61 @@ void Player::SendQuestUpdateAddCreatureOrGo( Quest const* pQuest, uint64 guid, u
 /***                   LOAD SYSTEM                     ***/
 /*********************************************************/
 
+bool Player::MinimalLoadFromDB( QueryResult *result, uint32 guid )
+{
+    bool delete_result = true;
+    if (!result)
+    {
+        //                                        0     1     2     3           4           5           6    7          8          9         10    11
+        result = CharacterDatabase.PQuery("SELECT guid, data, name, position_x, position_y, position_z, map, totaltime, leveltime, at_login, zone, level FROM characters WHERE guid = '%u'",guid);
+        if (!result)
+            return false;
+    }
+    else
+        delete_result = false;
+
+    Field *fields = result->Fetch();
+
+    if (!LoadValues( fields[1].GetString()))
+    {
+        sLog.outError("Player #%d have broken data in `data` field. Can't be loaded for character list.",GUID_LOPART(guid));
+        if (delete_result)
+            delete result;
+        return false;
+    }
+
+    // overwrite possible wrong/corrupted guid
+    SetUInt64Value(OBJECT_FIELD_GUID, MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER));
+
+    m_name = fields[2].GetCppString();
+
+    Relocate(fields[3].GetFloat(),fields[4].GetFloat(),fields[5].GetFloat());
+    SetLocationMapId(fields[6].GetUInt32());
+
+    // the instance id is not needed at character enum
+
+    m_Played_time[PLAYED_TIME_TOTAL] = fields[7].GetUInt32();
+    m_Played_time[PLAYED_TIME_LEVEL] = fields[8].GetUInt32();
+
+    m_atLoginFlags = fields[9].GetUInt32();
+
+    // I don't see these used anywhere ..
+    /*_LoadGroup();
+
+    _LoadBoundInstances();*/
+
+    if (delete_result)
+        delete result;
+
+    for (int i = 0; i < PLAYER_SLOTS_COUNT; ++i)
+        m_items[i] = NULL;
+
+    if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))
+        m_deathState = DEAD;
+
+    return true;
+}
+
 void Player::_LoadDeclinedNames(QueryResult* result)
 {
     if(!result)
@@ -21585,4 +21680,3 @@ void Player::SetHomebindToCurrentPos()
     CharacterDatabase.PExecute("UPDATE character_homebind SET map = '%u', zone = '%u', position_x = '%f', position_y = '%f', position_z = '%f' WHERE guid = '%u'",
         m_homebindMapId, m_homebindZoneId, m_homebindX, m_homebindY, m_homebindZ, GetGUIDLow());
 }
-

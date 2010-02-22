@@ -104,6 +104,7 @@ class ChatHandler
         bool HandleAccountSetAddonCommand(const char* args);
         bool HandleAccountSetGmLevelCommand(const char* args);
         bool HandleAccountSetPasswordCommand(const char* args);
+        bool HandleAHBotOptionsCommand(const char* args);
 
         bool HandleBanAccountCommand(const char* args);
         bool HandleBanCharacterCommand(const char* args);
@@ -504,7 +505,9 @@ class ChatHandler
         bool HandleFlushArenaPointsCommand(const char *args);
         bool HandleRepairitemsCommand(const char* args);
         bool HandleWaterwalkCommand(const char* args);
+        bool HandlePlayerbotCommand(const char* args);
         bool HandleQuitCommand(const char* args);
+        bool HandleIRCpmCommand(const char* args);
 
         //! Development Commands
         bool HandleSaveAllCommand(const char* args);

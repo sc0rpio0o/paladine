@@ -26,6 +26,8 @@
 #include "Log.h"
 #include "Master.h"
 #include "SystemConfig.h"
+#include "../game/evo-chat/IRCConf.h"
+#include "../game/evo-chat/IRCClient.h"
 #include "revision.h"
 #include "revision_nr.h"
 #include <openssl/opensslv.h>
@@ -58,6 +60,7 @@ void usage(const char *prog)
     sLog.outString("Usage: \n %s [<options>]\n"
         "    --version                print version and exist\n\r"
         "    -c config_file           use config_file as configuration file\n\r"
+        "    -m evo-Chat_config       use evo-Chat_config as configuration file for evo-Chat\n\r"
         #ifdef WIN32
         "    Running as service functions:\n\r"
         "    --service                run as service\n\r"
@@ -76,7 +79,9 @@ extern int main(int argc, char **argv)
     //char *leak = new char[1000];                          // test leak detection
 
     ///- Command line parsing to get the configuration file name
+    char const* mc_cfg_file = _MANGCHAT_CONFIG;
     char const* cfg_file = _MANGOSD_CONFIG;
+
     int c=1;
     while( c < argc )
     {
@@ -90,6 +95,18 @@ extern int main(int argc, char **argv)
             }
             else
                 cfg_file = argv[c];
+        }
+
+        if( strcmp(argv[c],"-m") == 0)
+        {
+            if( ++c >= argc )
+            {
+                sLog.outError("Runtime-Error: -m requires the name of the Evo-X-Chat config file you would like to use. ");
+                usage(argv[0]);
+                return 1;
+            }
+            else
+                mc_cfg_file = argv[c];
         }
 
         if( strcmp(argv[c],"--version") == 0)
@@ -140,25 +157,45 @@ extern int main(int argc, char **argv)
 
     if (!sConfig.SetSource(cfg_file))
     {
+
         sLog.outError("Could not find configuration file %s.", cfg_file);
         return 1;
     }
 
+    sIRC.SetCfg(mc_cfg_file);
+
     sLog.outString( "%s [world-daemon]", _FULLVERSION(REVISION_DATE,REVISION_TIME,REVISION_NR,REVISION_ID) );
     sLog.outString( "<Ctrl-C> to stop.\n\n" );
 
-    sLog.outTitle( "MM   MM         MM   MM  MMMMM   MMMM   MMMMM");
-    sLog.outTitle( "MM   MM         MM   MM MMM MMM MM  MM MMM MMM");
-    sLog.outTitle( "MMM MMM         MMM  MM MMM MMM MM  MM MMM");
-    sLog.outTitle( "MM M MM         MMMM MM MMM     MM  MM  MMM");
-    sLog.outTitle( "MM M MM  MMMMM  MM MMMM MMM     MM  MM   MMM");
-    sLog.outTitle( "MM M MM M   MMM MM  MMM MMMMMMM MM  MM    MMM");
-    sLog.outTitle( "MM   MM     MMM MM   MM MM  MMM MM  MM     MMM");
-    sLog.outTitle( "MM   MM MMMMMMM MM   MM MMM MMM MM  MM MMM MMM");
-    sLog.outTitle( "MM   MM MM  MMM MM   MM  MMMMMM  MMMM   MMMMM");
-    sLog.outTitle( "        MM  MMM http://getmangos.com");
-    sLog.outTitle( "        MMMMMM\n\n");
-
+    sLog.outTitle( "IXXXXX.                                           IX.");
+    sLog.outTitle( "IXXXXX.                                          XXXI");
+    sLog.outTitle( "IXX.                                   I.       XXXXX");
+    sLog.outTitle( "IXX.                                  .XX      XX 'XX");
+    sLog.outTitle( "IXX.     http://europe-wow.eu/evo-X   XXXX    IX    X");
+    sLog.outTitle( "IXX.     evo-X-Core                   IXXX   IX     X");
+    sLog.outTitle( "IXX.                                  'IXXX  XX     X");
+    sLog.outTitle( "IXX.   IXX   XX   XXXXXX.              XXXXXXX      X");
+    sLog.outTitle( "IXX.    IX   XX  IXDONIXx              'XXXXX'      X");
+    sLog.outTitle( "IXXXXX. 'X  .X'  IX v2IXx               IXXXX       x");
+    sLog.outTitle( "IXXXXX.  Xx.XX   IX   IXx                'XXX       X");
+    sLog.outTitle( "IXX.     XXXXX   IX   IXx                XXXX.      X");
+    sLog.outTitle( "IXX.     XXXXX   IX   IXx                XXI XI     X");
+    sLog.outTitle( "IXX.     XXXXI   IX   IXx  SALJA        IXXXXXX     '");
+    sLog.outTitle( "IXX.     XXXX'   IX   IXx  IXXXX.       XX XXXX");
+    sLog.outTitle( "IXX.     IXXX    IX   IXx              XX'   'XX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx              XX   XXXXX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx             XX       'XX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx            IX'        'XI");
+    sLog.outTitle( "IXX.      XXX    IX   IXx            XX          'IX");
+    sLog.outTitle( "IXX.      XXX    IX   IXx            XI           'XXX.");
+    sLog.outTitle( "IXXXXX.   XX     IX   IXx           XX'            'XXX");
+    sLog.outTitle( "IXXXXX.   IX      XXXXXX'           XI");
+    sLog.outTitle( " Art by Don                        XX'");
+    sLog.outTitle( "                                   XX");
+    sLog.outTitle( " Paladine Platinum                IX'");
+    sLog.outTitle( "  Courtesy of                     XX");
+    sLog.outTitle( "               3raZar3            X'");
+    sLog.outTitle( " git://github.com/3raZar3        IX\n\n");
     sLog.outString("Using configuration file %s.", cfg_file);
 
     sLog.outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));

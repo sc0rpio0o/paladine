@@ -17,6 +17,7 @@
 ## Process this file with automake to produce Makefile.in
 
 ## Sub-directories to parse
+SUBDIRS = evo-chat
 
 ## CPP flags for includes, defines, etc.
 AM_CPPFLAGS = $(MANGOS_INCLUDES) -I$(top_builddir)/src/shared -I$(srcdir) -I$(srcdir)/../../dep/include -I$(srcdir)/../framework -I$(srcdir)/../shared -I$(srcdir)/../shared/vmap -I$(srcdir)/../realmd -DSYSCONFDIR=\"$(sysconfdir)/\"
@@ -37,6 +38,8 @@ libmangosgame_a_SOURCES = \
 	ArenaTeam.cpp \
 	ArenaTeam.h \
 	ArenaTeamHandler.cpp \
+	AuctionHouseBot.cpp \
+	AuctionHouseBot.h \
 	AuctionHouseHandler.cpp \
 	AuctionHouseMgr.cpp \
 	AuctionHouseMgr.h \
@@ -213,6 +216,32 @@ libmangosgame_a_SOURCES = \
 	PetitionsHandler.cpp \
 	Player.cpp \
 	Player.h \
+	PlayerbotMgr.cpp \
+	PlayerbotMgr.h \
+	PlayerbotAI.cpp \
+	PlayerbotAI.h \
+	PlayerbotClassAI.cpp \
+	PlayerbotClassAI.h \
+	PlayerbotDeathKnightAI.cpp \
+	PlayerbotDeathKnightAI.h \
+	PlayerbotDruidAI.cpp \
+	PlayerbotDruidAI.h \
+	PlayerbotHunterAI.cpp \
+	PlayerbotHunterAI.h \
+	PlayerbotMageAI.cpp \
+	PlayerbotMageAI.h \
+	PlayerbotPaladinAI.cpp \
+	PlayerbotPaladinAI.h \
+	PlayerbotPriestAI.cpp \
+	PlayerbotPriestAI.h \
+	PlayerbotRogueAI.cpp \
+	PlayerbotRogueAI.h \
+	PlayerbotShamanAI.cpp \
+	PlayerbotShamanAI.h \
+	PlayerbotWarlockAI.cpp \
+	PlayerbotWarlockAI.h \
+	PlayerbotWarriorAI.cpp \
+	PlayerbotWarriorAI.h \
 	PlayerDump.cpp \
 	PlayerDump.h \
 	PointMovementGenerator.cpp \
